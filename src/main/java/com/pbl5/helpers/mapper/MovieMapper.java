@@ -1,5 +1,6 @@
 package com.pbl5.helpers.mapper;
 
+import com.pbl5.helpers.TimestampConvert;
 import com.pbl5.models.Movie;
 import com.pbl5.models.User;
 
@@ -18,7 +19,8 @@ public class MovieMapper implements IMapper<Movie>{
             movie.setKindId(result.getInt("kind_id"));
             movie.setKindName(result.getString("genre_name"));
             movie.setDuration(result.getInt("duration"));
-            movie.setReleaseDate(result.getLong("release_date"));
+            movie.setTitle(result.getString("title"));
+            movie.setReleaseDate(TimestampConvert.convertToLong(result.getTimestamp("release_date")));
             return movie;
         } catch (SQLException e) {
             // TODO Auto-generated catch block

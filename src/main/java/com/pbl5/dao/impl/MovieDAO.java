@@ -7,6 +7,7 @@ import com.pbl5.helpers.mapper.MovieMapper;
 import com.pbl5.helpers.mapper.UserMapper;
 import com.pbl5.models.Movie;
 
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -29,4 +30,35 @@ public class MovieDAO extends AbstractDAO<Movie> implements IMovieDAO {
         insert(sql,movie.getId(),movie.getTitle(),movie.getKindId(),TimestampConvert.convert(movie.getReleaseDate())
                 ,movie.getDuration(),movie.getDescription(),1,movie.getMoviePoster(),username,movie.getCreatedAt());
     }
+
+    @Override
+    public void updateStatusMovie(String movieId) {
+        logger.info("update status movie");
+        String sql = "UPDATE movies SET active = 0 WHERE movie_id = ?";
+        update(sql, movieId);
+    }
+
+    @Override
+    public void updateMovie(Movie movie, String username) {
+        logger.info("update movie");
+        String sql = "UPDATE movies SET title = ?, kind_id = ?, release_date = ?, " +
+                "duration = ?, description = ?, active = ?, poster = ?, " +
+                "modifiedBy = ?, modifiedAt = ? WHERE movie_id = ?";
+        Timestamp releaseDateTimestamp = TimestampConvert.convert(movie.getReleaseDate());
+        // Execute the update statement
+        update(sql, movie.getTitle(), movie.getKindId(), releaseDateTimestamp,
+                movie.getDuration(), movie.getDescription(), movie.getActive(), movie.getMoviePoster(),
+                username, movie.getModifiedAt(), movie.getId());
+    }
+
+    @Override
+    public Movie findOneById(String movieId) {
+        logger.info("find one by id movie");
+        String sql = "SELECT * FROM movies AS M INNER JOIN kindofmovie AS G ON M.kind_id = G.kind_id  " +
+                " WHERE M.active = 1 AND M.movie_id = ? ";
+
+        List<Movie> movies = query(sql, new MovieMapper(), movieId);
+        return movies.isEmpty()? null: movies.get(0);
+    }
+
 }

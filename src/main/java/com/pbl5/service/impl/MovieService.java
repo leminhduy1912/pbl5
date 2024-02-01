@@ -3,6 +3,7 @@ package com.pbl5.service.impl;
 import com.pbl5.dao.IMovieDAO;
 import com.pbl5.dao.impl.MovieDAO;
 import com.pbl5.helpers.IDGeneration;
+import com.pbl5.helpers.SaveFile;
 import com.pbl5.helpers.respone.Data;
 import com.pbl5.helpers.respone.Message;
 import com.pbl5.helpers.respone.Meta;
@@ -17,10 +18,11 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 public class MovieService implements IMovieService {
-    private IMovieDAO iMovieDAO = new MovieDAO();
+    private final IMovieDAO iMovieDAO = new MovieDAO();
     @Override
     public Message findAllMovieIsShowing() {
         List<Movie> results = iMovieDAO.findAllMovieIsShowing();
+
         Meta meta = new Meta.Builder(HttpServletResponse.SC_OK).withMessage(Response.SUCCESS).build();
         Data data = new Data.Builder(null).withResults(results).build();
         return new Message.Builder(meta).withData(data).build();
@@ -40,11 +42,58 @@ public class MovieService implements IMovieService {
             return new Message.Builder(meta).build();
 
         } catch (Exception e){
-            e.printStackTrace();
+
             Meta meta = new Meta.Builder(HttpServletResponse.SC_INTERNAL_SERVER_ERROR).withMessage(Response.CREATE_FAILED).build();
             return new Message.Builder(meta).build();
 
         }
 
+    }
+
+    @Override
+    public Message deleteMovie(String movieId) {
+        try {
+            iMovieDAO.updateStatusMovie(movieId);
+            Meta meta = new Meta.Builder(HttpServletResponse.SC_OK).withMessage(Response.SUCCESS).build();
+            return new Message.Builder(meta).build();
+        } catch (Exception e){
+
+            Meta meta = new Meta.Builder(HttpServletResponse.SC_INTERNAL_SERVER_ERROR).withMessage(Response.FAILED).build();
+            return new Message.Builder(meta).build();
+        }
+
+    }
+
+    @Override
+    public Message updateMovie(Movie movie, String username) {
+
+
+            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+            LocalDateTime now = LocalDateTime.now();
+            java.sql.Timestamp timestamp = java.sql.Timestamp.valueOf(now);
+            movie.setModifiedAt(timestamp);
+            try {
+                iMovieDAO.updateMovie(movie, username);
+                Meta meta = new Meta.Builder(HttpServletResponse.SC_OK).withMessage(Response.SUCCESS).build();
+                return new Message.Builder(meta).build();
+            } catch (Exception e){
+                Meta meta = new Meta.Builder(HttpServletResponse.SC_INTERNAL_SERVER_ERROR).withMessage(Response.FAILED).build();
+                return new Message.Builder(meta).build();
+            }
+
+
+    }
+
+    @Override
+    public Message findOneById(String movieId) {
+        try {
+            Movie movie = iMovieDAO.findOneById(movieId);
+            Meta meta = new Meta.Builder(HttpServletResponse.SC_OK).withMessage(Response.SUCCESS).build();
+            Data data = new Data.Builder(null).withResults(movie).build();
+            return new Message.Builder(meta).withData(data).build();
+        } catch (Exception e){
+            Meta meta = new Meta.Builder(HttpServletResponse.SC_NOT_FOUND).withMessage("Movie Not Found").build();
+            return new Message.Builder(meta).build();
+        }
     }
 }

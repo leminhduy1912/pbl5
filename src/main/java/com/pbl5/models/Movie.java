@@ -1,7 +1,9 @@
 package com.pbl5.models;
 
-import java.sql.Date;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
+import java.sql.Date;
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Movie extends AbstractModel{
     private String title;
     private String kindName;

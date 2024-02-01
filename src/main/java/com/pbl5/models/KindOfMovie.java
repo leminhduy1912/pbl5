@@ -1,6 +1,6 @@
 package com.pbl5.models;
 
-public class GenreMovie extends AbstractModel{
+public class KindOfMovie extends AbstractModel{
     private String genreCode;
     private String genreName;
 

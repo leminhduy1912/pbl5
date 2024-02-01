@@ -9,11 +9,12 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.logging.Logger;
 
 
 public class SaveFile {
     private static final String UPLOAD_DIRECTORY = "public";
-
+    private static final Logger logger = Logger.getLogger("SaveFile");
     public static String save(HttpServletRequest request, String folder) {
 
         Part filePart = null;
@@ -32,10 +33,29 @@ public class SaveFile {
             FileOutputStream outputStream = new FileOutputStream(file);
             outputStream.write(bytes);
             outputStream.close();
+            logger.info("saved image");
             return path;
-        } catch (IOException | ServletException e) {
-            throw new RuntimeException(e);
-        }
 
+        } catch (IOException | ServletException e) {
+            logger.info("saved image failed");
+            throw new RuntimeException(e);
+
+        }
+    }
+    public static boolean delete(String filename){
+        String imagePath = EnvConfig.load().get("IMAGE_FOLDER") + "/" + filename; // imageName là tên của ảnh cần xóa
+        File imageFile = new File(imagePath);
+        if (imageFile.exists()) {
+            if (imageFile.delete()) {
+                logger.info("deleted image ");
+                return true;
+            } else {
+                logger.info("deleted image failed");
+                return false;
+            }
+        } else {
+            logger.info("image not exist");
+            return false;
+        }
     }
 }

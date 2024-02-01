@@ -16,4 +16,12 @@ public class TimestampConvert {
             return null;
         }
     }
+    public static Long convertToLong(Timestamp timestamp) {
+        if (timestamp == null) {
+            return null;
+        }
+
+        return timestamp.getTime();
+    }
+
 }
