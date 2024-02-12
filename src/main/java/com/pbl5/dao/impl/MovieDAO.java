@@ -2,10 +2,14 @@ package com.pbl5.dao.impl;
 
 import com.pbl5.dao.GenericDAO;
 import com.pbl5.dao.IMovieDAO;
+import com.pbl5.dtos.Pagination.MoviePaginationDTO;
 import com.pbl5.helpers.TimestampConvert;
+import com.pbl5.helpers.mapper.CountMapper;
 import com.pbl5.helpers.mapper.MovieMapper;
 import com.pbl5.helpers.mapper.UserMapper;
 import com.pbl5.models.Movie;
+import com.pbl5.utils.constants.Pagination;
+import static com.pbl5.utils.constants.Pagination.PER_PAGE;
 
 import java.sql.Timestamp;
 import java.util.List;
@@ -59,6 +63,21 @@ public class MovieDAO extends AbstractDAO<Movie> implements IMovieDAO {
 
         List<Movie> movies = query(sql, new MovieMapper(), movieId);
         return movies.isEmpty()? null: movies.get(0);
+    }
+
+    @Override
+    public List<Movie> findAllMovieIsShowing(MoviePaginationDTO pagination) {
+        String sql = "SELECT * FROM movies AS M INNER JOIN kindofmovie AS G ON M.kind_id = G.kind_id  " +
+                " WHERE M.active = 1 ORDER BY M.createdAt DESC  LIMIT "+ PER_PAGE+" OFFSET " + (pagination.getPage() - 1) * PER_PAGE;
+        System.out.println("sql :"+sql);
+        return query(sql, new MovieMapper());
+    }
+
+    @Override
+    public Integer countAllMovie() {
+        String sql = "SELECT COUNT(*) as total FROM movies ";
+        List<Integer> pages = query(sql, new CountMapper());
+        return pages.isEmpty() ? null : pages.get(0);
     }
 
 }

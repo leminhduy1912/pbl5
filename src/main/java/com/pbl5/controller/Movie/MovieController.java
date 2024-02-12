@@ -2,6 +2,7 @@ package com.pbl5.controller.Movie;
 
 import com.pbl5.dao.IMovieDAO;
 import com.pbl5.dao.impl.MovieDAO;
+import com.pbl5.dtos.Pagination.MoviePaginationDTO;
 import com.pbl5.dtos.UserDTO;
 import com.pbl5.dtos.UserSignInDTO;
 import com.pbl5.helpers.Http;
@@ -32,9 +33,14 @@ public class MovieController extends HttpServlet {
     private IMovieService movieService = new MovieService();
     private IMovieDAO movieDAO = new MovieDAO();
 
+//    @Override
+//    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+//        ErrorHandler.handle(resp, () -> movieService.findAllMovieIsShowing());
+//    }
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        ErrorHandler.handle(resp, () -> movieService.findAllMovieIsShowing());
+        MoviePaginationDTO dto = Http.paramsToString(req.getParameterMap()).toModel(MoviePaginationDTO.class);
+        ErrorHandler.handle(resp, () -> movieService.findAllMovieIsShowing(dto));
     }
 
     @Override

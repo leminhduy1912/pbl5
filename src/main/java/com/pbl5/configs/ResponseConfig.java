@@ -1,18 +1,18 @@
 package com.pbl5.configs;
 
+import org.springframework.context.annotation.Configuration;
+
 import javax.servlet.http.HttpServletResponse;
 
 public class ResponseConfig {
-    private static String urlFE = "127.0.0.1";
-    public static void ConfigHeader(HttpServletResponse res) {
+    public static void ConfigHeader(HttpServletResponse response) {
+        response.addHeader("Access-Control-Allow-Origin", "*");
+        response.addHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE, HEAD");
+        response.addHeader("Access-Control-Allow-Headers", "X-PINGOTHER, Origin, X-Requested-With, Content-Type, Accept");
+        response.addHeader("Access-Control-Max-Age", "1728000");
 
-        res.addHeader("Access-Control-Allow-Origin", urlFE);
-        res.addHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS, PUT,PATCH, DELETE, HEAD");
-        res.addHeader("Access-Control-Allow-Headers", "X-PINGOTHER, Origin, X-Requested-With, Content-Type, Accept, x-api-key, Accept-Encoding, Accept-Language, Authorization,ACCESS_TOKEN,client_id");
-        res.addHeader("Access-Control-Request-Headers", "X-PINGOTHER, Origin, X-Requested-With, Content-Type, Accept, x-api-key, Accept-Encoding, Accept-Language, Authorization,ACCESS_TOKEN,client_id");
-        res.setHeader("Access-Control-Max-Age", "3600");
-        res.setHeader("Access-Control-Allow-Credentials", "true");
-        res.setContentType("application/json");
-        res.setCharacterEncoding("UTF-8");
+        response.setHeader("Access-Control-Allow-Credentials", "true");
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
     }
 }
