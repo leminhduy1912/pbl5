@@ -15,7 +15,10 @@ import com.pbl5.service.IMovieService;
 import javax.servlet.http.HttpServletResponse;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static com.pbl5.utils.constants.Pagination.PER_PAGE;
 
@@ -109,6 +112,26 @@ public class MovieService implements IMovieService {
             return new Message.Builder(meta).withData(data).build();
         } catch (Exception e) {
             Meta meta = new Meta.Builder(HttpServletResponse.SC_NOT_FOUND).withMessage("Movie Not Found").build();
+            return new Message.Builder(meta).build();
+        }
+    }
+
+    @Override
+    public Message findImageOfMovieIsShowing() {
+        try {
+            List<Movie> moviesImages = iMovieDAO.findImageOfAllMovieIsShowing();
+            List<Map<String, String>> results = new ArrayList<>();
+            for (Movie moviesImage : moviesImages) {
+                Map<String, String> paths = new HashMap<>();
+                paths.put("id", moviesImage.getId());
+                paths.put("path", moviesImage.getMoviePoster());
+                results.add(paths);
+            }
+            Meta meta = new Meta.Builder(HttpServletResponse.SC_OK).withMessage(Response.SUCCESS).build();
+            Data data = new Data.Builder(null).withResults(results).build();
+            return new Message.Builder(meta).withData(data).build();
+        } catch (Exception e) {
+            Meta meta = new Meta.Builder(HttpServletResponse.SC_INTERNAL_SERVER_ERROR).withMessage("Internal Server Error").build();
             return new Message.Builder(meta).build();
         }
     }

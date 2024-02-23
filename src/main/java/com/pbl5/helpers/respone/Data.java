@@ -17,6 +17,17 @@ public class Data {
 
     private String refreshToken;
     private String role;
+ private String email;
+
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
     @JsonProperty("id")
     private String userId;
     private Object result = null;
@@ -51,7 +62,7 @@ public class Data {
     public static class Builder {
         private String accessToken;
         private String refreshToken;
-
+        private String email;
         private String role;
         private Object result;
 
@@ -65,7 +76,10 @@ public class Data {
             this.accessToken = token;
             return this;
         }
-
+        public Builder withEmail(String email) {
+            this.email = email;
+            return this;
+        }
         public Builder withRefreshToken(String token) {
             this.refreshToken = token;
             return this;
@@ -89,6 +103,7 @@ public class Data {
         public Data build() {
             Data body = new Data();
             body.accessToken = this.accessToken;
+            body.email=this.email;
             body.refreshToken = this.refreshToken;
             body.result = this.result;
             body.role = this.role;

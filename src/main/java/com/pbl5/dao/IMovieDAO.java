@@ -13,5 +13,6 @@ public interface IMovieDAO {
     void updateMovie(Movie movie,String username);
     Movie findOneById(String movieId);
     List<Movie> findAllMovieIsShowing(MoviePaginationDTO pagination);
+    List<Movie> findImageOfAllMovieIsShowing();
     Integer countAllMovie();
 }

@@ -4,15 +4,53 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 
 import java.sql.Date;
 @JsonInclude(JsonInclude.Include.NON_NULL)
+
 public class Movie extends AbstractModel{
     private String title;
     private String kindName;
-    private int kindId;
+    private int kindId ;
     private Long releaseDate;
     private int duration;
     private String description;
     private int active;
+
+    public String getActor() {
+        return actor;
+    }
+
+    public void setActor(String actor) {
+        this.actor = actor;
+    }
+
+    public String getDirector() {
+        return director;
+    }
+
+    public void setDirector(String director) {
+        this.director = director;
+    }
+
+    public String getSub() {
+        return sub;
+    }
+
+    public void setSub(String sub) {
+        this.sub = sub;
+    }
+
+    public int getForAge() {
+        return forAge;
+    }
+
+    public void setForAge(int forAge) {
+        this.forAge = forAge;
+    }
+
     private String moviePoster;
+    private String actor;
+    private String director;
+    private String sub;
+    private int forAge;
 
     public String getMoviePoster() {
         return moviePoster;

@@ -20,6 +20,10 @@ public class MovieMapper implements IMapper<Movie>{
             movie.setKindName(result.getString("genre_name"));
             movie.setDuration(result.getInt("duration"));
             movie.setTitle(result.getString("title"));
+            movie.setActor(result.getString("actor"));
+            movie.setSub(result.getString("sub"));
+            movie.setDirector(result.getString("director"));
+            movie.setForAge(result.getInt("for_age"));
             movie.setReleaseDate(TimestampConvert.convertToLong(result.getTimestamp("release_date")));
             return movie;
         } catch (SQLException e) {

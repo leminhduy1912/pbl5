@@ -17,11 +17,12 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.logging.Logger;
 
-@WebServlet("/upload")
+@WebServlet("/img/*")
 public class ImageResource extends HttpServlet {
     private final static Logger LOGGER =
             Logger.getLogger(ImageResource.class.getCanonicalName());
-    private static final String UPLOAD_DIRECTORY  = "images";
+    private static final String UPLOAD_DIRECTORY = "images";
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         // TODO Auto-generated method stub

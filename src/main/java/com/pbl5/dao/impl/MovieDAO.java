@@ -6,6 +6,7 @@ import com.pbl5.dtos.Pagination.MoviePaginationDTO;
 import com.pbl5.helpers.TimestampConvert;
 import com.pbl5.helpers.mapper.CountMapper;
 import com.pbl5.helpers.mapper.MovieMapper;
+import com.pbl5.helpers.mapper.PosterMovieMapper;
 import com.pbl5.helpers.mapper.UserMapper;
 import com.pbl5.models.Movie;
 import com.pbl5.utils.constants.Pagination;
@@ -30,9 +31,10 @@ public class MovieDAO extends AbstractDAO<Movie> implements IMovieDAO {
 
         logger.info("Create movie");
         String sql="INSERT INTO movies (movie_id,title,kind_id,release_date," +
-                "duration,description,active,poster,createdBy,createdAt) VALUES (?,?,?,?,?,?,?,?,?,?)";
+                "duration,description,active,poster,createdBy,createdAt,sub,for_age,director,actor) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
         insert(sql,movie.getId(),movie.getTitle(),movie.getKindId(),TimestampConvert.convert(movie.getReleaseDate())
-                ,movie.getDuration(),movie.getDescription(),1,movie.getMoviePoster(),username,movie.getCreatedAt());
+                ,movie.getDuration(),movie.getDescription(),1,movie.getMoviePoster(),username,movie.getCreatedAt()
+                ,movie.getSub(),movie.getForAge(),movie.getDirector(),movie.getActor());
     }
 
     @Override
@@ -71,6 +73,12 @@ public class MovieDAO extends AbstractDAO<Movie> implements IMovieDAO {
                 " WHERE M.active = 1 ORDER BY M.createdAt DESC  LIMIT "+ PER_PAGE+" OFFSET " + (pagination.getPage() - 1) * PER_PAGE;
         System.out.println("sql :"+sql);
         return query(sql, new MovieMapper());
+    }
+
+    @Override
+    public List<Movie> findImageOfAllMovieIsShowing() {
+        String sql = "SELECT poster,movie_id FROM movies WHERE active = 1 ";
+        return query(sql, new PosterMovieMapper());
     }
 
     @Override

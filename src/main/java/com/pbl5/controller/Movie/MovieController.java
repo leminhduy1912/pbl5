@@ -32,17 +32,6 @@ import static com.pbl5.utils.constants.Endpoint.*;
 public class MovieController extends HttpServlet {
     private IMovieService movieService = new MovieService();
     private IMovieDAO movieDAO = new MovieDAO();
-
-//    @Override
-//    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-//        ErrorHandler.handle(resp, () -> movieService.findAllMovieIsShowing());
-//    }
-    @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        MoviePaginationDTO dto = Http.paramsToString(req.getParameterMap()).toModel(MoviePaginationDTO.class);
-        ErrorHandler.handle(resp, () -> movieService.findAllMovieIsShowing(dto));
-    }
-
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Movie movie = Http.paramsToString(req.getParameterMap()).toModel(Movie.class);
@@ -73,5 +62,5 @@ public class MovieController extends HttpServlet {
             }
             ErrorHandler.handle(resp, () -> movieService.updateMovie(movie, req.getHeader("username")));
         }
-        }
     }
+}

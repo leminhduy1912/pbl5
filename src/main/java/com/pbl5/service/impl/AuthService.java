@@ -32,8 +32,10 @@ public class AuthService implements IAuthService {
 
     @Override
     public Message Login(UserSignInDTO dto) throws UnexpectedException, NotFoundException, InvalidCredentialsException {
-        if (dto.getEmail() == null || dto.getPassword() == null)
-            throw new InvalidCredentialsException(Response.INVALID_EMAIL_OR_PASSWORD);
+        if (dto.getEmail() == null || dto.getPassword() == null){
+            Meta meta = new Meta.Builder(HttpServletResponse.SC_BAD_REQUEST).withMessage(Response.INVALID_EMAIL_OR_PASSWORD).build();
+            return new Message.Builder(meta).build();
+        }
         JwtGeneration JWT;
         HashMap<String, String> claims;
         try {
@@ -43,18 +45,24 @@ public class AuthService implements IAuthService {
             throw new UnexpectedException();
         }
         User user = iUserDAO.findByEmail(dto.getEmail());
-        if (user == null) throw new NotFoundException(Response.USER_NOT_FOUND);
+        if (user == null) {
+            Meta meta = new Meta.Builder(HttpServletResponse.SC_NOT_FOUND).withMessage(Response.USER_NOT_FOUND).build();
+            return new Message.Builder(meta).build();
+        }
         String hashedPassword = user.getPassword();
         boolean checkPassword = DecryptPassword.Decrypt(dto.getPassword(),hashedPassword);
-        if (!checkPassword)
-            throw new InvalidCredentialsException(Response.WRONG_PASSWORD);
+        if (!checkPassword){
+            Meta meta = new Meta.Builder(HttpServletResponse.SC_NOT_ACCEPTABLE).withMessage(Response.WRONG_PASSWORD).build();
+            return new Message.Builder(meta).build();
+        }
+
         claims.put("userId", user.getId());
         claims.put("role", user.getRoleCode());
-//        claims.put("email",u)
+
         String role = user.getRoleCode();
         String accessToken = JWT.generate(claims);
-
-        Data data = new Data.Builder(accessToken).withRole(role).withId(user.getId()).build();
+        System.out.println("email"+user.getEmail());
+        Data data = new Data.Builder(accessToken).withRole(role).withEmail(user.getEmail()).withId(user.getId()).build();
         Meta meta = new Meta.Builder(HttpServletResponse.SC_OK).withMessage(Response.LOGIN_SUCCESS).build();
         return new Message.Builder(meta).withData(data).build();
     }

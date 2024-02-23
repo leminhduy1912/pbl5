@@ -36,8 +36,8 @@ public class UserDAO extends AbstractDAO<User> implements IUserDAO {
     public void save(User user) {
         // TODO Auto-generated method stub
         logger.info("Save User");
-        String sql = "INSERT INTO users (userId," + "role_code," + "address," + "email," + "point," + "status," + "password," + "createdAt," + "createdBy)" + " VALUES(?,?,?,?,?,?,?,?,?)";
+        String sql = "INSERT INTO users (user_id," + "role_id," + "address," + "email," + "point," + "status," + "password," + "createdAt," + "createdBy)" + " VALUES(?,?,?,?,?,?,?,?,?)";
 
-        insert(sql, user.getId(), user.getRoleCode(), user.getAddress(), user.getEmail(), user.getPoint(), 1, user.getPassword(), user.getCreatedAt(), user.getCreatedBy());
+        insert(sql, user.getId(), 2, user.getAddress(), user.getEmail(), user.getPoint(), 1, user.getPassword(), user.getCreatedAt(), user.getCreatedBy());
     }
 }
