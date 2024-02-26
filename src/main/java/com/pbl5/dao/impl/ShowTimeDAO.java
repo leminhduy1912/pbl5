@@ -32,4 +32,17 @@ public class ShowTimeDAO extends AbstractDAO<ShowTime> implements IShowTimeDAO {
         insert(sql,showTime.getId(),showTime.getMovieId(),showTime.getTheaterId(),showTime.getTimeStart()
                 ,showTime.getTimeEnd(),showTime.getDateShow(),1,showTime.getCreatedAt(),username);
     }
+
+    @Override
+    public List<ShowTime> findByMovieIdAndDateShow(String movieId, String dateShow) {
+
+        String[] parts = dateShow.split("-");
+        String sql ="SELECT * FROM showtimes AS s INNER JOIN theaters AS t on s.theaterId = t.theaterId" +
+                " WHERE s.movieId = ? " +
+                "AND SUBSTRING_INDEX(s.date_show, '-', 1) = ? " +
+                "AND SUBSTRING_INDEX(SUBSTRING_INDEX(s.date_show, '-', 2), '-', -1) = ? " +
+                "AND SUBSTRING_INDEX(s.date_show, '-', -1) =?" +
+                "ORDER BY SUBSTRING_INDEX(s.startTime, ':', 1) ASC";
+        return query(sql,new ShowTimeMapper(),movieId,parts[0],parts[1],parts[2]);
+    }
 }

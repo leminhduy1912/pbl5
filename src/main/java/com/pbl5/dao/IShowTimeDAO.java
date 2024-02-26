@@ -8,4 +8,5 @@ import java.util.List;
 public interface IShowTimeDAO {
      List<ShowTime> getShowTimeByMovieIdAndDate(String movieId, String dateShow);
      void  createShowTime(ShowTime showTime,String username );
+     List<ShowTime> findByMovieIdAndDateShow(String movieId,String dateShow);
 }

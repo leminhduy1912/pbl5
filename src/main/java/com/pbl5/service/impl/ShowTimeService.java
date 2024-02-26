@@ -22,7 +22,7 @@ public class    ShowTimeService implements IShowTimeService {
     private IShowTimeDAO showTimeDAO = new ShowTimeDAO();
     @Override
     public Message findByMovieIdAndDateShow(String movieId, String dateShow) {
-        List<ShowTime> result = showTimeDAO.getShowTimeByMovieIdAndDate(movieId, dateShow);
+        List<ShowTime> result = showTimeDAO.findByMovieIdAndDateShow(movieId, dateShow);
         Meta meta = new Meta.Builder(HttpServletResponse.SC_OK).withMessage(Response.SUCCESS).build();
         Data data = new Data.Builder(null).withResults(result).build();
         return new Message.Builder(meta).withData(data).build();
