@@ -19,4 +19,5 @@ public interface IAuthService {
 
 
     Message ResetPassword(String id,String userId) throws NotFoundException, UnexpectedException;
+    Message checkEmailExistAndSendVerifyMailCode(String email);
 }

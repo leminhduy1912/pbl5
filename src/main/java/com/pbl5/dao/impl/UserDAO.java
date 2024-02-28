@@ -24,11 +24,11 @@ public class UserDAO extends AbstractDAO<User> implements IUserDAO {
     public User findByEmail(String email) {
         logger.info("Find By Email");
         // TODO Auto-generated method stub
-        String sql = "SELECT * FROM users AS U INNER JOIN roles AS R ON u.role_id = r.role_id  " +
+        String sql = "SELECT * FROM users AS U INNER JOIN roles AS R ON u.role_id = ? " +
                 " WHERE U.email = ? ";
 
-        List<User> users = query(sql, new UserMapper(false, true), email);
-
+        List<User> users = query(sql, new UserMapper(false, true),2, email);
+        System.out.println("user length"+users.size());
         return users.isEmpty() ? null : users.get(0);
     }
 

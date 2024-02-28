@@ -48,6 +48,16 @@ public class User extends AbstractModel {
     private int status ;
     private int point;
 
+    private String vertificationCode;
+
+    public String getVertificationCode() {
+        return vertificationCode;
+    }
+
+    public void setVertificationCode(String vertificationCode) {
+        this.vertificationCode = vertificationCode;
+    }
+
     public int getPoint() {
         return point;
     }

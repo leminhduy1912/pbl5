@@ -1,7 +1,10 @@
 package com.pbl5.controller.Auth;
 
+
+import com.pbl5.utils.SendEmail;
 import com.pbl5.dtos.UserDTO;
 import com.pbl5.helpers.Http;
+import com.pbl5.models.User;
 import com.pbl5.service.IAuthService;
 import com.pbl5.service.impl.AuthService;
 import com.pbl5.utils.exceptions.ErrorHandler;
@@ -12,7 +15,10 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+
 import java.io.IOException;
+
 import static com.pbl5.utils.constants.Endpoint.AUTH;
 import static com.pbl5.utils.constants.Endpoint.V1;
 
