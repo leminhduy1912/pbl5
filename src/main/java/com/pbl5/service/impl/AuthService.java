@@ -11,6 +11,7 @@ import com.pbl5.helpers.respone.Meta;
 import com.pbl5.helpers.respone.Response;
 import com.pbl5.models.User;
 import com.pbl5.service.IAuthService;
+import com.pbl5.utils.SendEmail;
 import com.pbl5.utils.exceptions.dbException.CreateFailedException;
 import com.pbl5.utils.exceptions.dbException.DuplicateEntryException;
 import com.pbl5.utils.exceptions.dbException.NotFoundException;
@@ -20,11 +21,13 @@ import org.apache.hc.core5.http.NotImplementedException;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.security.NoSuchAlgorithmException;
 import java.security.Timestamp;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
+import java.util.Map;
 
 public class AuthService implements IAuthService {
 
@@ -61,7 +64,7 @@ public class AuthService implements IAuthService {
 
         String role = user.getRoleCode();
         String accessToken = JWT.generate(claims);
-        System.out.println("email"+user.getEmail());
+
         Data data = new Data.Builder(accessToken).withRole(role).withEmail(user.getEmail()).withId(user.getId()).build();
         Meta meta = new Meta.Builder(HttpServletResponse.SC_OK).withMessage(Response.LOGIN_SUCCESS).build();
         return new Message.Builder(meta).withData(data).build();
@@ -107,5 +110,70 @@ public class AuthService implements IAuthService {
     @Override
     public Message ResetPassword(String id, String userId) throws NotFoundException, UnexpectedException {
         return null;
+    }
+
+    @Override
+    public Message checkEmailExistAndSendVerifyMailCode(String email) {
+        System.out.println("email nhan duoc "+email);
+        User isEmailExist = iUserDAO.findByEmail(email);
+
+        if (isEmailExist == null){
+            System.out.println("khong co email");
+            Map<String, String> result = new HashMap<>();
+            result.put("email", email);
+            SendEmail sm = new SendEmail();
+            String code = sm.getRandom();
+            result.put("verifyCode", code);
+
+
+            User user = new User();
+            user.setVertificationCode(code);
+            user.setEmail(email);
+            System.out.println("email send :" + user.getEmail() );
+            boolean test = sm.sendEmail(user);
+            if (test) {
+                Data data = new Data.Builder(null).withResults(result).build();
+                Meta meta = new Meta.Builder(HttpServletResponse.SC_OK).withMessage(Response.SUCCESS).build();
+                return new Message.Builder(meta).withData(data).build();
+
+            } else {
+                Meta meta = new Meta.Builder(HttpServletResponse.SC_NOT_ACCEPTABLE).withMessage(Response.FAILED).build();
+                return new Message.Builder(meta).build();
+            }
+
+        }  else {
+            Meta meta = new Meta.Builder(HttpServletResponse.SC_CONFLICT).withMessage(Response.EMAIL_IN_USE).build();
+            return new Message.Builder(meta).build();
+        }
+//        if (isEmailExist.is){
+//            System.out.println("khong co email");
+//            Map<String,String> result = new HashMap<>();
+//            result.put("email", isEmailExist.getEmail());
+//            SendEmail sm = new SendEmail();
+//            String code = sm.getRandom();
+//            result.put("verify-code",code);
+//
+//
+//            User user = new User();
+//            user.setVertificationCode(code);
+//            user.setEmail(isEmailExist.getEmail());
+//            System.out.println("email send :"+isEmailExist.getEmail());
+//            boolean test = sm.sendEmail(user);
+//            if(test){
+//                Data data = new Data.Builder(null).withResults(result).build();
+//                Meta meta = new Meta.Builder(HttpServletResponse.SC_OK).withMessage(Response.SUCCESS).build();
+//                return new Message.Builder(meta).withData(data).build();
+//
+//            }else{
+//                Meta meta = new Meta.Builder(HttpServletResponse.SC_NOT_ACCEPTABLE).withMessage(Response.FAILED).build();
+//                return new Message.Builder(meta).build();
+//            }
+//
+//
+//        } else {
+//            Meta meta = new Meta.Builder(HttpServletResponse.SC_OK).withMessage(Response.EMAIL_IN_USE).build();
+//            return new Message.Builder(meta).build();
+//        }
+
     }
 }
