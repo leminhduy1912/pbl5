@@ -8,4 +8,5 @@ import java.util.List;
 public interface IBookingService {
     Message createBooking(Booking booking);
     Message findSeatAndStatusByShowTimeId(String showTimeId);
+//    Message checkStatusSeatByShowTimeId(String showTimeId,String se);
 }

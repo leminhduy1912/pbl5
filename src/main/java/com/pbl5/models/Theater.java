@@ -4,6 +4,15 @@ public class Theater extends AbstractModel{
     private String name;
     private int capacity;
     private int status;
+    private String seatName;
+
+    public String getSeatName() {
+        return seatName;
+    }
+
+    public void setSeatName(String seatName) {
+        this.seatName = seatName;
+    }
 
     public int getStatus() {
         return status;

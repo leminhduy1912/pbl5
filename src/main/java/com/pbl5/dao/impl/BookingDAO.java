@@ -26,5 +26,11 @@ public class BookingDAO extends AbstractDAO<Booking> implements IBookingDAO {
         return query(sql,new GetSeatAndStatusMapper(),showtimeId);
     }
 
-
+    @Override
+    public Booking checkStatusSeatByShowTimeId(Booking booking) {
+        String sql="SELECT  seatId,status from bookings WHERE showtimeId=? AND seatId=?";
+        List<Booking> results = query(sql,new GetSeatAndStatusMapper(),
+                booking.getShowTimeId(),booking.getSeatId());
+        return results.isEmpty() ? null: results.get(0);
+    }
 }

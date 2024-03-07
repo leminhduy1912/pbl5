@@ -21,22 +21,29 @@ public class BookingService implements IBookingService {
 
     @Override
     public Message createBooking(Booking booking) {
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
-        LocalDateTime now = LocalDateTime.now();
-        java.sql.Timestamp timestamp = java.sql.Timestamp.valueOf(now);
-        booking.setCreatedAt(timestamp);
-        String id = IDGeneration.generate();
-        booking.setId(id);
+//        System.out.println("id"+booking.get);
+       Booking checkSeatExist = bookingDAO.checkStatusSeatByShowTimeId(booking);
+       if (checkSeatExist != null){
+           Meta meta = new Meta.Builder(HttpServletResponse.SC_CONFLICT).withMessage(Response.FAILED).build();
+           return new Message.Builder(meta).build();
+       } else {
+           DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+           LocalDateTime now = LocalDateTime.now();
+           java.sql.Timestamp timestamp = java.sql.Timestamp.valueOf(now);
+           booking.setCreatedAt(timestamp);
+           String id = IDGeneration.generate();
+           booking.setId(id);
 
-        try {
-            bookingDAO.createBooking(booking);
-            Meta meta = new Meta.Builder(HttpServletResponse.SC_OK).withMessage(Response.CREATED).build();
-            return new Message.Builder(meta).build();
-        } catch (Exception e) {
-            e.printStackTrace();
-            Meta meta = new Meta.Builder(HttpServletResponse.SC_INTERNAL_SERVER_ERROR).withMessage(Response.CREATE_FAILED).build();
-            return new Message.Builder(meta).build();
-        }
+           try {
+               bookingDAO.createBooking(booking);
+               Meta meta = new Meta.Builder(HttpServletResponse.SC_OK).withMessage(Response.CREATED).build();
+               return new Message.Builder(meta).build();
+           } catch (Exception e) {
+               e.printStackTrace();
+               Meta meta = new Meta.Builder(HttpServletResponse.SC_INTERNAL_SERVER_ERROR).withMessage(Response.CREATE_FAILED).build();
+               return new Message.Builder(meta).build();
+           }
+       }
     }
 
     @Override

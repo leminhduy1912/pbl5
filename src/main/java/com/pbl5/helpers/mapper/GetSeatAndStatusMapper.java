@@ -11,9 +11,20 @@ public class GetSeatAndStatusMapper implements IMapper<Booking>{
     public Booking mapRow(ResultSet result) throws SQLException {
         Booking booking = new Booking();
 
-
-        booking.setSeatName(result.getString("seatNum"));
         booking.setStatus(result.getString("status"));
+        try {
+            booking.setSeatName(result.getString("seatNum"));
+        } catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+        try {
+            booking.setSeatId(result.getString("seatId"));
+
+        } catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+
+
 
         return booking;
     }
