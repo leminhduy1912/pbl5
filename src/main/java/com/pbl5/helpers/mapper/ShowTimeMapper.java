@@ -17,6 +17,7 @@ public class ShowTimeMapper implements IMapper<ShowTime>{
         showTime.setDateShow(result.getString("date_show"));
         showTime.setId(result.getString("showtimeId"));
         showTime.setStatus(result.getInt("status"));
+        showTime.setMovieName(result.getString("title"));
         return showTime;
     }
 }

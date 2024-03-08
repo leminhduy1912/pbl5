@@ -37,7 +37,7 @@ public class ShowTimeDAO extends AbstractDAO<ShowTime> implements IShowTimeDAO {
     public List<ShowTime> findByMovieIdAndDateShow(String movieId, String dateShow) {
 
         String[] parts = dateShow.split("-");
-        String sql ="SELECT * FROM showtimes AS s INNER JOIN theaters AS t on s.theaterId = t.theaterId" +
+        String sql ="SELECT * FROM showtimes AS s INNER JOIN theaters AS t on s.theaterId = t.theaterId INNER JOIN movies as m on m.movie_id=s.movieId" +
                 " WHERE s.movieId = ? " +
                 "AND SUBSTRING_INDEX(s.date_show, '-', 1) = ? " +
                 "AND SUBSTRING_INDEX(SUBSTRING_INDEX(s.date_show, '-', 2), '-', -1) = ? " +

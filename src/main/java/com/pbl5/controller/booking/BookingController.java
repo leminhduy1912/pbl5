@@ -33,12 +33,8 @@ public class BookingController extends HttpServlet {
     }
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
         Booking booking = Http.paramsToString(req.getParameterMap()).toModel(Booking.class);
-
-
-
-
+        System.out.println("user id of booking"+booking.getUserId());
         ErrorHandler.handle(resp, () -> bookingService.createBooking(booking));
     }
 

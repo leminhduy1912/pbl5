@@ -1,7 +1,5 @@
 package com.pbl5.models;
 
-import java.util.Collection;
-import java.util.List;
 
 public class Booking extends AbstractModel{
     private String userId;

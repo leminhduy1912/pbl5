@@ -5,8 +5,15 @@ import java.sql.Timestamp;
 public class ShowTime extends  AbstractModel {
     private String movieId;
     private String theaterId;
+   private String movieName;
 
+    public String getMovieName() {
+        return movieName;
+    }
 
+    public void setMovieName(String movieName) {
+        this.movieName = movieName;
+    }
 
     private String theaterName;
     private String timeStart;
